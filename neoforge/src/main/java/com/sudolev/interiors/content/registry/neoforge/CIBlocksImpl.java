@@ -1,4 +1,4 @@
-package com.sudolev.interiors.content.registry.forge;
+package com.sudolev.interiors.content.registry.neoforge;
 
 import com.sudolev.interiors.CreateInteriors;
 
@@ -7,9 +7,9 @@ import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;

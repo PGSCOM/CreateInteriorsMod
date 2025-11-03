@@ -12,8 +12,8 @@ import java.util.zip.Deflater
 
 plugins {
 	java
-	id("architectury-plugin") version "3.4.161" apply false
-	id("dev.architectury.loom") version "1.9.428" apply false
+	id("architectury-plugin") version "3.4.166" apply false
+	id("dev.architectury.loom") version "1.10.85" apply false
 	id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 }
 
@@ -50,7 +50,7 @@ allprojects {
 	java {
 		withSourcesJar()
 		toolchain {
-			languageVersion = JavaLanguageVersion.of(17)
+			languageVersion = JavaLanguageVersion.of(21)
 		}
 	}
 }
@@ -148,14 +148,14 @@ subprojects {
 			"minecraft_version" to "minecraft_version"(),
 			"fabric_api_version" to "fabric_api_version"(),
 			"fabric_loader_version" to "fabric_loader_version"(),
-			"forge_version" to "forge_version"().substringBefore("."), // only specify major version of forge
-			"create_forge_version" to "create_forge_version"().substringBefore("-"), // cut off build number
-			"create_fabric_version" to "create_fabric_version"().substringBefore("$$") // Trim +mcX.XX.X from version string
+			"neoforge_version" to "neoforge_version"().substringBefore("."), // only specify major version
+			"create_neoforge_version" to "create_neoforge_version"().substringBefore("-"), // cut off build number
+			"create_fabric_version" to "create_fabric_version"().substringBefore("+") // Trim +mcX.XX.X from version string
 		)
 
 		inputs.properties(properties)
 
-		filesMatching(listOf("fabric.mod.json", "META-INF/mods.toml")) {
+		filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml")) {
 			expand(properties)
 		}
 	}
