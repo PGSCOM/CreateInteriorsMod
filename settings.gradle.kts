@@ -5,6 +5,7 @@ pluginManagement {
 		maven { url = uri("https://maven.neoforged.net/releases") }
 		maven { url = uri("https://maven.quiltmc.org/repository/release") }
 		gradlePluginPortal()
+		mavenCentral()
 	}
 }
 

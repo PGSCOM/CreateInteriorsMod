@@ -12,8 +12,8 @@ import java.util.zip.Deflater
 
 plugins {
 	java
-	id("architectury-plugin") version "3.4.166" apply false
-	id("dev.architectury.loom") version "1.10.85" apply false
+	id("architectury-plugin") version "3.4.162" apply false
+	id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
 	id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 }
 
