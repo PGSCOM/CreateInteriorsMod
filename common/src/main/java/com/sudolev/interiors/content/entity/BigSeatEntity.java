@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityType.Builder;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,8 +31,8 @@ public class BigSeatEntity extends SeatEntity {
 	}
 
 	@Override
-	public double getPassengersRidingOffset() {
-		return super.getPassengersRidingOffset() + 0.34;
+	protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scaleFactor) {
+		return super.getPassengerAttachmentPoint(passenger, dimensions, scaleFactor).add(0, 0.34, 0);
 	}
 
 	public static class Render extends EntityRenderer<BigSeatEntity> {

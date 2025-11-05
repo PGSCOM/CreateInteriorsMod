@@ -7,22 +7,26 @@ loom {
 		vmArg("-Dmixin.env.refMapRemappingFile=${projectDir}/build/createSrgToMcp/output.srg")
 	}
 
-	neoForge {
-		mixinConfig("interiors-common.mixins.json")
-		mixinConfig("interiors.mixins.json")
+	// Configurar mixins usando la DSL moderna de Loom
+	mixin {
+		// Requerido por Loom al configurar el AP de Mixin de forma clásica
+		useLegacyMixinAp.set(true)
+		add(sourceSets.main.get(), "interiors-common.mixins.json")
 	}
 }
 
 dependencies {
 	neoForge("net.neoforged:neoforge:${"neoforge_version"()}")
 
-	// Create and its dependencies
-	modImplementation("com.simibubi.create:create-neoforge-${"minecraft_version"()}:${"create_neoforge_version"()}:slim") { isTransitive = false }
-	modImplementation("net.createmod.ponder:Ponder-NeoForge-${"minecraft_version"()}:${"ponder_version"()}")
-	modImplementation("com.tterrag.registrate:Registrate:${"registrate_version"()}")
-	modImplementation("dev.engine-room.flywheel:flywheel-neoforge-api-${"minecraft_version"()}:${"flywheel_version"()}")
+	// Create para NeoForge en 1.21.1
+	modImplementation("com.simibubi.create:create-${"minecraft_version"()}:${"create_neoforge_version"()}:slim") { isTransitive = false }
 	modImplementation("io.github.llamalad7:mixinextras-neoforge:${"mixin_extras_version"()}")
-	modRuntimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${"minecraft_version"()}:${"flywheel_version"()}")
+	
+	// Registrate necesario para las clases de registro
+	modCompileOnly("com.tterrag.registrate:Registrate:${"registrate_version"()}") { isTransitive = false }
+	
+	// JSR-305 annotations
+	compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 }
 
 operator fun String.invoke() = rootProject.ext[this] as? String ?: error("No property \"$this\"")

@@ -30,7 +30,7 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-loader:${"fabric_loader_version"()}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${"fabric_api_version"()}+${"minecraft_version"()}")
 
-	// Create - dependencies are added transitively
+	// Create - dependemos del artefacto de Fabric para 1.20.1
 	modImplementation("com.simibubi.create:create-fabric-${"minecraft_version"()}:${"create_fabric_version"()}")
 
 	// Development QOL

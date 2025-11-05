@@ -5,7 +5,8 @@ import net.minecraft.resources.ResourceLocation;
 import com.simibubi.create.CreateBuildInfo;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription.Modifier;
-import net.createmod.catnip.lang.FontHelper.Palette;
+// TODO: Fix Catnip API for MC 1.21.1
+// import net.createmod.catnip.lang.FontHelper.Palette;
 
 import com.sudolev.interiors.content.registry.CIBlocks;
 import com.sudolev.interiors.content.registry.CIEntities;
@@ -24,7 +25,8 @@ public abstract class CreateInteriors {
 	public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
 
 	static {
-		REGISTRATE.setTooltipModifierFactory(item -> new Modifier(item, Palette.STANDARD_CREATE));
+		// TODO: Fix Palette for Catnip API changes in MC 1.21.1
+		// REGISTRATE.setTooltipModifierFactory(item -> new Modifier(item, Palette.STANDARD_CREATE));
 	}
 
 	public static void init() {
@@ -38,6 +40,6 @@ public abstract class CreateInteriors {
 	}
 
 	public static ResourceLocation asResource(String path) {
-		return new ResourceLocation(ID, path);
+		return ResourceLocation.fromNamespaceAndPath(ID, path);
 	}
 }

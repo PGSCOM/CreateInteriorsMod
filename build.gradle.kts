@@ -12,8 +12,8 @@ import java.util.zip.Deflater
 
 plugins {
 	java
-	id("architectury-plugin") version "3.4.162" apply false
-	id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
+	id("architectury-plugin") version "3.4.161" apply false
+	id("dev.architectury.loom") version "1.9.428" apply false
 	id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 }
 
@@ -126,7 +126,9 @@ subprojects {
 
 	dependencies {
 		common(project(":common", "namedElements")) { isTransitive = false }
-		shadowCommon(project(":common", "transformProduction${capitalizedName}")) { isTransitive = false }
+		// Algunos entornos no exponen 'transformProduction<Platform>' desde ':common'.
+		// Caemos al uso de 'namedElements' también para el sombreado.
+		shadowCommon(project(":common", "namedElements")) { isTransitive = false }
 	}
 
 	tasks.named<ShadowJar>("shadowJar") {
@@ -228,6 +230,21 @@ fun Project.setupRepositories() {
 		exclusiveMaven("https://api.modrinth.com/maven", "maven.modrinth") // LazyDFU, JourneyMap
 		exclusiveMaven("https://cursemaven.com", "curse.maven")
 		maven("https://maven.theillusivec4.top/") // Curios
+		maven("https://maven.neoforged.net/releases") { // NeoForge
+			content {
+				includeGroup("net.neoforged")
+				includeGroup("net.neoforged.fancymodloader")
+				includeGroup("net.neoforged.accesstransformers")
+				includeGroup("net.neoforged.coremods")
+				includeGroup("net.neoforged.installertools")
+				includeGroup("cpw.mods")
+			}
+		}
+		maven("https://maven.minecraftforge.net") { // ModLauncher, BootstrapLauncher, SecureJarHandler
+			content {
+				includeGroup("cpw.mods")
+			}
+		}
 		maven("https://maven.tterrag.com/") { // Registrate
 			content {
 				includeGroup("com.tterrag.registrate")
@@ -238,6 +255,8 @@ fun Project.setupRepositories() {
 				includeGroup("com.simibubi.create")
 				includeGroup("net.createmod.ponder")
 				includeGroup("dev.engine-room.flywheel")
+				includeGroup("net.createmod") // legacy catch-all (may not include subgroups)
+				includeGroup("net.createmod.catnip") // Catnip
 			}
 		}
 		exclusiveMaven("https://maven.jamieswhiteshirt.com/libs-release", "com.jameswhiteshirt.reach-entity-attributes") // Reach Entity Attributes

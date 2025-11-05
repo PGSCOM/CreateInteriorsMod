@@ -26,7 +26,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-import net.createmod.catnip.lang.Lang;
+// TODO: Fix Catnip API for MC 1.21.1
+// import net.createmod.catnip.lang.Lang;
 
 import static com.sudolev.interiors.content.block.chair.ChairBlock.ArmrestConfiguration.*;
 
@@ -154,7 +155,9 @@ public abstract class ChairBlock extends DirectionalSeatBlock implements ProperW
 
 		@Override
 		public String getSerializedName() {
-			return Lang.asId(name());
+			// TODO: Fix Lang for Catnip API changes in MC 1.21.1
+			return name().toLowerCase(java.util.Locale.ROOT);
+			// return Lang.asId(name());
 		}
 	}
 

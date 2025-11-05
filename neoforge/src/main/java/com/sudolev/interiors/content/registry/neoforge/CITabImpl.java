@@ -8,16 +8,15 @@ import net.minecraft.world.item.DyeColor;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import com.sudolev.interiors.CreateInteriors;
 import com.sudolev.interiors.content.registry.CIBlocks;
 
-import java.util.function.Supplier;
-
 public class CITabImpl {
 	private static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, CreateInteriors.ID);
 
-	public static final Supplier<CreativeModeTab> TAB = REGISTER.register("main",
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = REGISTER.register("main",
 		() -> CreativeModeTab.builder()
 			.title(Component.literal(CreateInteriors.NAME))
 			.icon(() -> CIBlocks.CHAIRS.get(DyeColor.RED).asStack(1))
@@ -32,9 +31,9 @@ public class CITabImpl {
 	}
 
 	public static ResourceKey<CreativeModeTab> getKey() {
-		return TAB.get().getBackgroundLocation() != null ? 
-			ResourceKey.create(Registries.CREATIVE_MODE_TAB, TAB.get().getBackgroundLocation()) : 
-			null;
+		// TODO: Fix for MC 1.21.1 - getBackgroundLocation() was removed
+		// Creative tabs no longer have background locations in the same way
+		return ResourceKey.create(Registries.CREATIVE_MODE_TAB, CreateInteriors.asResource("main"));
 	}
 
 	public static CreativeModeTab get() {

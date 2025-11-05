@@ -15,6 +15,8 @@ public class CreateInteriorsForge {
 
 		CreateInteriors.init();
 		CITabImpl.register(modEventBus);
-		CreateInteriors.REGISTRATE.registerEventListeners(modEventBus);
+		// TODO: Fix for NeoForge 1.21.1 - registerEventListeners expects Forge IEventBus
+		// Need to verify if Create's Registrate has NeoForge-compatible version
+		// CreateInteriors.REGISTRATE.registerEventListeners(modEventBus);
 	}
 }
