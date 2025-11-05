@@ -2,9 +2,24 @@
 
 **Versión**: 0.5.6+mc1.21.1-local  
 **Fecha**: 5 de Noviembre, 2025  
-**Estado**: ✅ ESTABLE - Compilación Exitosa
+**Estado**: ✅ ESTABLE Y PROBADO - Compilación Exitosa + Server Loading Fix
 
 ---
+
+## ⚠️ FIX CRÍTICO APLICADO
+
+### Problema Resuelto: Language Provider Version
+**Error Original**: 
+```
+needs language provider javafml:21 or above to load
+We have found 4.0.41
+```
+
+**Causa**: El archivo `neoforge.mods.toml` tenía `loaderVersion = "[${neoforge_version},)"` que se expandía a `[21.1.192,)` en lugar del valor correcto para el language provider.
+
+**Solución**: Cambiado a `loaderVersion = "[4,)"` que es compatible con NeoForge 21.1.x (javafml:4.0.41)
+
+✅ **El mod ahora carga correctamente en servidores NeoForge 21.1.192**
 
 ## ✅ Migración Completada
 
