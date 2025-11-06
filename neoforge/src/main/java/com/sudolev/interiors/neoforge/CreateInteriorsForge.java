@@ -20,9 +20,8 @@ public class CreateInteriorsForge {
 		// Register everything after Architectury has initialized
 		// CIBlocks must be loaded after @ExpectPlatform injection is complete
 		CITabImpl.register(modEventBus);
-		
-		// TODO: Fix for NeoForge 1.21.1 - registerEventListeners expects Forge IEventBus
-		// Need to verify if Create's Registrate has NeoForge-compatible version
-		// CreateInteriors.REGISTRATE.registerEventListeners(modEventBus);
+
+		// Vincular CreateRegistrate al EventBus de NeoForge (requiere Registrate MC1.21)
+		CreateInteriors.REGISTRATE.registerEventListeners(modEventBus);
 	}
 }
