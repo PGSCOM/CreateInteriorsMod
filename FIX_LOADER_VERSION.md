@@ -108,3 +108,66 @@ El mod ahora es compatible con:
 
 **Fecha del Fix**: 5 de Noviembre, 2025  
 **Versión**: 0.5.6+mc1.21.1-local (post-fix)
+
+---
+
+## 🔧 FIX 2: NullPointerException en getVersion()
+
+### Error Encontrado
+```
+java.lang.AssertionError: null
+    at com.sudolev.interiors.Utils.getVersion(Utils.java:22)
+    at com.sudolev.interiors.CreateInteriors.<clinit>(CreateInteriors.java:23)
+```
+
+### Causa
+El método `UtilsImpl.getVersion()` no manejaba el caso donde `ModList.get().getModFileById(modid)` retorna `null` durante la fase temprana de carga del mod.
+
+### Solución
+Agregado try-catch y verificación de null en `neoforge/src/main/java/com/sudolev/interiors/neoforge/UtilsImpl.java`:
+
+```java
+public static String getVersion(String modid) {
+    String versionString = "UNKNOWN";
+    
+    try {
+        var modFile = ModList.get().getModFileById(modid);
+        if (modFile == null) {
+            CreateInteriors.LOGGER.warn("Mod file not found for ID: " + modid);
+            return versionString;
+        }
+        // ... resto del código
+    } catch (Exception e) {
+        CreateInteriors.LOGGER.error("Failed to get version for mod: " + modid, e);
+    }
+    return versionString;
+}
+```
+
+### Resultado
+✅ El mod ahora maneja gracefully la situación donde ModList no está completamente inicializado
+✅ Retorna "UNKNOWN" como fallback en lugar de lanzar AssertionError
+
+---
+
+## 🔧 FIX 3: Compatibilidad con Create 6.0.6
+
+### Error Encontrado
+```
+Missing or unsupported mandatory dependencies:
+Mod ID: 'create', Expected range: '[6.0.9,)', Actual version: '6.0.6'
+```
+
+### Solución
+Cambiado el rango de versión de Create en `neoforge.mods.toml`:
+- **Antes**: `versionRange = "[${create_neoforge_version},)"` → expandía a `[6.0.9,)`
+- **Ahora**: `versionRange = "[6.0,)"` → acepta Create 6.0.0+
+
+### Resultado
+✅ Compatible con Create 6.0.6 y superiores
+
+---
+
+**Fecha de los Fixes**: 5 de Noviembre, 2025  
+**Versión Final**: 0.5.6+mc1.21.1-local (build 22:01 UTC)
+

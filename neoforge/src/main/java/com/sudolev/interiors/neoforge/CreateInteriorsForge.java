@@ -13,8 +13,14 @@ public class CreateInteriorsForge {
 	public CreateInteriorsForge(IEventBus modEventBus, ModContainer modContainer) {
 		IEventBus forgeEventBus = NeoForge.EVENT_BUS;
 
-		CreateInteriors.init();
+		// Get version and platform name directly to avoid Architectury timing issues
+		String version = modContainer.getModInfo().getVersion().toString();
+		CreateInteriors.init(version, "NeoForge", new PlatformImpl());
+		
+		// Register everything after Architectury has initialized
+		// CIBlocks must be loaded after @ExpectPlatform injection is complete
 		CITabImpl.register(modEventBus);
+		
 		// TODO: Fix for NeoForge 1.21.1 - registerEventListeners expects Forge IEventBus
 		// Need to verify if Create's Registrate has NeoForge-compatible version
 		// CreateInteriors.REGISTRATE.registerEventListeners(modEventBus);

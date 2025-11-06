@@ -1,17 +1,18 @@
 package com.sudolev.interiors.content.registry;
 
+import com.sudolev.interiors.CreateInteriors;
 import com.sudolev.interiors.content.entity.BigSeatEntity;
 import com.tterrag.registrate.util.entry.EntityEntry;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 
 @SuppressWarnings("unused")
 public final class CIEntities {
-	public static final EntityEntry<BigSeatEntity> BIG_SEAT = createSeat();
+	public static EntityEntry<BigSeatEntity> BIG_SEAT;
 
-	@ExpectPlatform
 	private static EntityEntry<BigSeatEntity> createSeat() {
-		throw new AssertionError();
+		return CreateInteriors.platform.createSeat();
 	}
 
-	public static void register() {}
+	public static void register() {
+		BIG_SEAT = createSeat();
+	}
 }

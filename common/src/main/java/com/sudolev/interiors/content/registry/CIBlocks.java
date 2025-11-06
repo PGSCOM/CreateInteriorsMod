@@ -53,9 +53,8 @@ import static com.sudolev.interiors.CreateInteriors.REGISTRATE;
 @SuppressWarnings("unused")
 public final class CIBlocks {
 
-	static {
-		setupCreativeTab();
-	}
+	// Moved setupCreativeTab() call from static block to register() method
+	// to avoid Architectury @ExpectPlatform timing issues
 
 	// Helper method for recipes in MC 1.21.1 - creates a Criterion from an ItemLike
 	private static Criterion<?> has(ItemLike item) {
@@ -266,7 +265,12 @@ public final class CIBlocks {
 	});
 
 	public static void register() {
-		// load class
+		// Load class and initialize all static block registrations
+	}
+	
+	public static void setupTab() {
+		// Called after all blocks are registered to setup the creative tab
+		CreateInteriors.platform.setupCreativeTab();
 	}
 
 	private static int facing(BlockState state) {

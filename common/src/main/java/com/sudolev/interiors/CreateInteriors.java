@@ -20,7 +20,8 @@ public abstract class CreateInteriors {
 	public static final String ID = "interiors";
 	public static final String NAME = "Create: Interiors";
 	public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
-	public static final String VERSION = Utils.getVersion(ID);
+	private static String version = "UNKNOWN";
+	public static IPlatform platform;
 
 	public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
 
@@ -29,14 +30,20 @@ public abstract class CreateInteriors {
 		// REGISTRATE.setTooltipModifierFactory(item -> new Modifier(item, Palette.STANDARD_CREATE));
 	}
 
-	public static void init() {
+	public static void init(String modVersion, String platformName, IPlatform platformImpl) {
+		version = modVersion;
+		platform = platformImpl;
 		LOGGER.info("{} v{} initializing! Create version: {} on platform: {}",
-			NAME, VERSION, CreateBuildInfo.VERSION, Utils.platformName());
+			NAME, version, CreateBuildInfo.VERSION, platformName);
 
 		CITags.register();
-		CITab.register();
-		CIEntities.register();
 		CIBlocks.register();
+		CIEntities.register();
+		CITab.register();
+	}
+
+	public static String getVersion() {
+		return version;
 	}
 
 	public static ResourceLocation asResource(String path) {
