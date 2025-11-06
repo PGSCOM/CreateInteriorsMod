@@ -52,16 +52,18 @@ public class DirectionalSeatBlock extends SeatBlock implements IWrenchable {
 		super.createBlockStateDefinition(builder.add(FACING));
 	}
 
-	@Override
+	// TODO: Fix use() method signature for MC 1.21.1 - changed to useItemOn() or different signature
+	/* @Override
 	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
 		ItemStack heldItem = player.getItemInHand(hand);
 
-		if(heldItem == AllItems.WRENCH.asStack(1) || heldItem.is(AllItems.WRENCH.asItem())) {
+		// TODO: Fix asItem() for Create API changes in MC 1.21.1 - changed to get()
+		if(heldItem == AllItems.WRENCH.asStack(1) || heldItem.is(AllItems.WRENCH.get())) {
 			return InteractionResult.PASS;
 		}
 
 		return super.use(state, world, pos, player, hand, result);
-	}
+	} */
 
 	@Override
 	public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {

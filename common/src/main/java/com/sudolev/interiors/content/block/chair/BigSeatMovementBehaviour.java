@@ -6,7 +6,8 @@ import java.util.UUID;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.actors.seat.SeatMovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
-import net.createmod.catnip.math.VecHelper;
+// TODO: Fix Catnip API for MC 1.21.1
+// import net.createmod.catnip.math.VecHelper;
 
 import com.sudolev.interiors.Utils;
 
@@ -42,7 +43,9 @@ public class BigSeatMovementBehaviour extends SeatMovementBehaviour {
 		}
 		if(toDismount == null) return;
 		toDismount.stopRiding();
-		Vec3 position = VecHelper.getCenterOf(pos).add(0, 1f, 0);
+		// TODO: Fix VecHelper for Create API changes in MC 1.21.1
+		Vec3 position = Vec3.atCenterOf(pos).add(0, 1f, 0);
+		// Vec3 position = VecHelper.getCenterOf(pos).add(0, 1f, 0);
 		toDismount.teleportTo(position.x, position.y, position.z);
 
 		Utils.getCustomData(toDismount).remove("ContraptionDismountLocation");

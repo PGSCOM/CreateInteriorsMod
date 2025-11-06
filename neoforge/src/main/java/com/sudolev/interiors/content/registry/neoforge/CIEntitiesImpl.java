@@ -1,4 +1,4 @@
-package com.sudolev.interiors.content.registry.forge;
+package com.sudolev.interiors.content.registry.neoforge;
 
 import net.minecraft.world.entity.MobCategory;
 

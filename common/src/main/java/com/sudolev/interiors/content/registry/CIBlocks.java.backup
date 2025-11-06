@@ -53,22 +53,21 @@ import static com.sudolev.interiors.CreateInteriors.REGISTRATE;
 @SuppressWarnings("unused")
 public final class CIBlocks {
 
-	// Moved setupCreativeTab() call from static block to register() method
-	// to avoid Architectury @ExpectPlatform timing issues
-
-	// Helper method for recipes in MC 1.21.1 - creates a Criterion from an ItemLike
+	// Helper method to create Criterion for recipe unlock conditions in MC 1.21+
 	private static Criterion<?> has(ItemLike item) {
-		return InventoryChangeTrigger.TriggerInstance.hasItems(item);
+		return inventoryTrigger(ItemPredicate.Builder.item().of(item));
 	}
 
-	// Helper method for recipes in MC 1.21.1 - creates a Criterion from a TagKey
 	private static Criterion<?> has(net.minecraft.tags.TagKey<net.minecraft.world.item.Item> tag) {
-		return InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(tag).build());
+		return inventoryTrigger(ItemPredicate.Builder.item().of(tag));
 	}
 
-	// Helper method to cast RegistrateRecipeProvider to RecipeOutput for MC 1.21.1
-	private static net.minecraft.data.recipes.RecipeOutput recipeOutput(RegistrateRecipeProvider provider) {
-		return (net.minecraft.data.recipes.RecipeOutput) provider;
+	private static Criterion<?> inventoryTrigger(ItemPredicate.Builder... predicates) {
+		return net.minecraft.advancements.critereon.InventoryChangeTrigger.TriggerInstance.hasItems(predicates);
+	}
+
+	static {
+		setupCreativeTab();
 	}
 
 	public static final BlockEntry<Block> SEATWOOD_PLANKS = REGISTRATE.block("seatwood_planks", Block::new)
@@ -85,15 +84,13 @@ public final class CIBlocks {
 		.initialProperties(SharedProperties::wooden)
 		.properties(p -> p.mapColor(DyeColor.ORANGE))
 		.transform(axeOnly())
-		// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-		/* // TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
+		.blockstate((c, p) -> p.variants(c.get())
 			.forAllStatesExcept(state -> {
 				String facing = state.getValue(ChairBlock.FACING).getSerializedName();
 				int rotation = facing(state);
 
 				return modelWithRotation(getExistingModelFile(p, "block/wall_mounted_table"), rotation);
-			}, WATERLOGGED)) */
+			}, WATERLOGGED))
 		.simpleItem()
 		.register();
 
@@ -103,12 +100,7 @@ public final class CIBlocks {
 			.initialProperties(SharedProperties::wooden)
 			.properties(p -> p.mapColor(color))
 			.transform(axeOnly())
-			.initialProperties(SharedProperties::wooden)
-			.properties(p -> p.mapColor(color))
-			.transform(axeOnly())
-			// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* // TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
+			.blockstate((c, p) -> p.variants(c.get())
 				.forAllStatesExcept(state -> {
 					String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
 					String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
@@ -117,17 +109,13 @@ public final class CIBlocks {
 
 					ResourceLocation top = Create.asResource("block/seat/top_" + colorName);
 					ResourceLocation side = Create.asResource("block/seat/side_" + colorName);
-					ResourceLocation sideTop = CreateInteriors.asResource("block/chair/side_top_" + colorName);
+					ResourceLocation sideTop = /* p.modLoc("block/chair/side_top_" + colorName); */
 
 					Object model = customChairModelFile(p, "block/floor_chair/" + armrest + cropped_state,
 						"block/floor_chair/" + colorName + "_floor_chair_" + armrest + cropped_state,
 						top, side, sideTop, side);
 					return modelWithRotation(model, rotation);
-				}, WATERLOGGED)) */
-			// TODO: Fix recipes for MC 1.21.1 API
-			.onRegister(movementBehaviour(new SeatMovementBehaviour()))
-			.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
-//			.onRegister(assignDataBehaviour(new EntityNameDisplaySource(), "entity_name"))
+				}, WATERLOGGED))
 			/*.recipe\(\(c, p\) -> {...}\)*/
 			.onRegister(movementBehaviour(new SeatMovementBehaviour()))
 			.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
@@ -147,9 +135,7 @@ public final class CIBlocks {
 			.initialProperties(SharedProperties::wooden)
 			.properties(p -> p.mapColor(color))
 			.transform(axeOnly())
-			// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* // TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
+			.blockstate((c, p) -> p.variants(c.get())
 				.forAllStatesExcept(state -> {
 					String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
 					String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
@@ -164,8 +150,8 @@ public final class CIBlocks {
 						"block/chair/" + colorName + "_chair_" + armrest + cropped_state,
 						top, side, sideTop, side);
 					return modelWithRotation(model, rotation);
-				}, WATERLOGGED)) */
-			// TODO: Fix recipes for MC 1.21.1 API
+				}, WATERLOGGED))
+			/*.recipe\(\(c, p\) -> {...}\)*/
 			.onRegister(movementBehaviour(new BigSeatMovementBehaviour()))
 			.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
 			//.onRegister(assignDataBehaviour(new EntityNameDisplaySource(), "entity_name"))
@@ -182,8 +168,7 @@ public final class CIBlocks {
 		.initialProperties(SharedProperties::wooden)
 		.properties(p -> p.mapColor(DyeColor.BLACK))
 		.transform(axeOnly())
-		// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
+		.blockstate((c, p) -> p.variants(c.get())
 			.forAllStatesExcept(state -> {
 				String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
 				String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
@@ -193,7 +178,7 @@ public final class CIBlocks {
 				return modelWithRotation(createModelFileWithExistingParent(p,
 					"block/chair/" + armrest + cropped_state,
 					"block/chair/kelp_chair_" + armrest + cropped_state), rotation);
-			}, WATERLOGGED)) */
+			}, WATERLOGGED))
 		.onRegister(movementBehaviour(new BigSeatMovementBehaviour()))
 		.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
 		.onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.interiors.chair"))
@@ -206,8 +191,7 @@ public final class CIBlocks {
 		.initialProperties(SharedProperties::wooden)
 		.properties(p -> p.mapColor(DyeColor.BLACK))
 		.transform(axeOnly())
-		// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
+		.blockstate((c, p) -> p.variants(c.get())
 			.forAllStatesExcept(state -> {
 				String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
 				String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
@@ -216,7 +200,7 @@ public final class CIBlocks {
 				return modelWithRotation(createModelFileWithExistingParent(p,
 					"block/floor_chair/" + armrest + cropped_state,
 					"block/chair/kelp_floor_chair_" + armrest + cropped_state), rotation);
-			}, WATERLOGGED)) */
+			}, WATERLOGGED))
 		.onRegister(movementBehaviour(new SeatMovementBehaviour()))
 		.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
 		.onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.interiors.chair"))
@@ -229,13 +213,12 @@ public final class CIBlocks {
 		.initialProperties(SharedProperties::wooden)
 		.properties(p -> p.mapColor(DyeColor.BLACK))
 		.transform(axeOnly())
-		// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
+		.blockstate((c, p) -> p.variants(c.get())
 			.forAllStatesExcept(state -> {
 				String facing = state.getValue(ChairBlock.FACING).getSerializedName();
 				int rotation = facing(state);
 				return modelWithRotation(getExistingModelFile(p, "block/kelp_seat"), rotation);
-			}, WATERLOGGED)) */
+			}, WATERLOGGED))
 		.onRegister(movementBehaviour(new SeatMovementBehaviour()))
 		.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
 		//.onRegister(assignDataBehaviour(new EntityNameDisplaySource(), "entity_name"))
@@ -259,18 +242,13 @@ public final class CIBlocks {
 					.requires(ItemTags.PLANKS)
 					.requires(DyeHelper.getWoolOfDye(color))
 					.unlockedBy("has_planks", has(ItemTags.PLANKS))
-					.save(recipeOutput(p), CreateInteriors.asResource("crafting/cushion/" + c.getName())))
+					.save(p, CreateInteriors.asResource("crafting/cushion/" + c.getName())))
 			.simpleItem()
 			.register();
 	});
 
 	public static void register() {
-		// Load class and initialize all static block registrations
-	}
-	
-	public static void setupTab() {
-		// Called after all blocks are registered to setup the creative tab
-		CreateInteriors.platform.setupCreativeTab();
+		// load class
 	}
 
 	private static int facing(BlockState state) {

@@ -35,8 +35,8 @@ public class CommonTag<T> {
 		return new CommonTag<>(
 			registry,
 			CreateInteriors.asResource("internal/" + common),
-			new ResourceLocation("c", fabric),
-			new ResourceLocation("forge", forge)
+			ResourceLocation.fromNamespaceAndPath("c", fabric),
+			ResourceLocation.fromNamespaceAndPath("forge", forge)
 		);
 	}
 
