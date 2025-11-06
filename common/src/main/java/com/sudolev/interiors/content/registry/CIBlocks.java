@@ -124,9 +124,9 @@ public final class CIBlocks {
 			})
 			.recipe((ctx, provider) -> {
 				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ctx.get())
-					.requires(AllBlocks.SEAT.get())
 					.requires(ItemTags.PLANKS)
-					.unlockedBy("has_seat", has(AllBlocks.SEAT.get()))
+					.requires(ItemTags.WOOL)
+					.unlockedBy("has_planks", has(ItemTags.PLANKS))
 					.save(recipeOutput(provider));
 			})
 			.onRegister(movementBehaviour(new SeatMovementBehaviour()))
@@ -167,9 +167,9 @@ public final class CIBlocks {
 			})
 			.recipe((ctx, provider) -> {
 				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ctx.get())
-					.requires(AllBlocks.SEAT.get())
 					.requires(ItemTags.PLANKS)
-					.unlockedBy("has_seat", has(AllBlocks.SEAT.get()))
+					.requires(ItemTags.WOOL)
+					.unlockedBy("has_planks", has(ItemTags.PLANKS))
 					.save(recipeOutput(provider));
 			})
 			.onRegister(movementBehaviour(new BigSeatMovementBehaviour()))
