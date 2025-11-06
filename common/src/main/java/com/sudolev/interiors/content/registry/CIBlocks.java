@@ -85,15 +85,13 @@ public final class CIBlocks {
 		.initialProperties(SharedProperties::wooden)
 		.properties(p -> p.mapColor(DyeColor.ORANGE))
 		.transform(axeOnly())
-		// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-		/* // TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
-			.forAllStatesExcept(state -> {
-				String facing = state.getValue(ChairBlock.FACING).getSerializedName();
-				int rotation = facing(state);
-
-				return modelWithRotation(getExistingModelFile(p, "block/wall_mounted_table"), rotation);
-			}, WATERLOGGED)) */
+		.blockstate((ctx, provider) -> {
+			provider.getVariantBuilder(ctx.get())
+				.forAllStatesExcept(state -> {
+					int rotation = facing(state);
+					return modelWithRotation(getExistingModelFile(provider, "block/wall_mounted_table"), rotation);
+				}, WATERLOGGED);
+		})
 		.simpleItem()
 		.register();
 
@@ -106,29 +104,31 @@ public final class CIBlocks {
 			.initialProperties(SharedProperties::wooden)
 			.properties(p -> p.mapColor(color))
 			.transform(axeOnly())
-			// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* // TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
-				.forAllStatesExcept(state -> {
-					String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
-					String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
+			.blockstate((ctx, provider) -> {
+				provider.getVariantBuilder(ctx.get())
+					.forAllStatesExcept(state -> {
+						String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
+						String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
 
-					int rotation = facing(state);
+						int rotation = facing(state);
 
-					ResourceLocation top = Create.asResource("block/seat/top_" + colorName);
-					ResourceLocation side = Create.asResource("block/seat/side_" + colorName);
-					ResourceLocation sideTop = CreateInteriors.asResource("block/chair/side_top_" + colorName);
+						ResourceLocation top = Create.asResource("block/seat/top_" + colorName);
+						ResourceLocation side = Create.asResource("block/seat/side_" + colorName);
+						ResourceLocation sideTop = CreateInteriors.asResource("block/chair/side_top_" + colorName);
 
-					Object model = customChairModelFile(p, "block/floor_chair/" + armrest + cropped_state,
-						"block/floor_chair/" + colorName + "_floor_chair_" + armrest + cropped_state,
-						top, side, sideTop, side);
-					return modelWithRotation(model, rotation);
-				}, WATERLOGGED)) */
-			// TODO: Fix recipes for MC 1.21.1 API
-			.onRegister(movementBehaviour(new SeatMovementBehaviour()))
-			.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
-//			.onRegister(assignDataBehaviour(new EntityNameDisplaySource(), "entity_name"))
-			/*.recipe\(\(c, p\) -> {...}\)*/
+						Object model = customChairModelFile(provider, "block/floor_chair/" + armrest + cropped_state,
+							"block/floor_chair/" + colorName + "_floor_chair_" + armrest + cropped_state,
+							top, side, sideTop, side);
+						return modelWithRotation(model, rotation);
+					}, WATERLOGGED);
+			})
+			.recipe((ctx, provider) -> {
+				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ctx.get())
+					.requires(AllBlocks.SEAT.get())
+					.requires(ItemTags.PLANKS)
+					.unlockedBy("has_seat", has(AllBlocks.SEAT.get()))
+					.save(recipeOutput(provider));
+			})
 			.onRegister(movementBehaviour(new SeatMovementBehaviour()))
 			.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
 //			.onRegister(assignDataBehaviour(new EntityNameDisplaySource(), "entity_name"))
@@ -147,25 +147,31 @@ public final class CIBlocks {
 			.initialProperties(SharedProperties::wooden)
 			.properties(p -> p.mapColor(color))
 			.transform(axeOnly())
-			// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* // TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
-				.forAllStatesExcept(state -> {
-					String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
-					String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
+			.blockstate((ctx, provider) -> {
+				provider.getVariantBuilder(ctx.get())
+					.forAllStatesExcept(state -> {
+						String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
+						String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
 
-					int rotation = facing(state);
+						int rotation = facing(state);
 
-					ResourceLocation top = Create.asResource("block/seat/top_" + colorName);
-					ResourceLocation side = Create.asResource("block/seat/side_" + colorName);
-					ResourceLocation sideTop = CreateInteriors.asResource("block/chair/side_top_" + colorName);
+						ResourceLocation top = Create.asResource("block/seat/top_" + colorName);
+						ResourceLocation side = Create.asResource("block/seat/side_" + colorName);
+						ResourceLocation sideTop = CreateInteriors.asResource("block/chair/side_top_" + colorName);
 
-					Object model = customChairModelFile(p, "block/chair/" + armrest + cropped_state,
-						"block/chair/" + colorName + "_chair_" + armrest + cropped_state,
-						top, side, sideTop, side);
-					return modelWithRotation(model, rotation);
-				}, WATERLOGGED)) */
-			// TODO: Fix recipes for MC 1.21.1 API
+						Object model = customChairModelFile(provider, "block/chair/" + armrest + cropped_state,
+							"block/chair/" + colorName + "_chair_" + armrest + cropped_state,
+							top, side, sideTop, side);
+						return modelWithRotation(model, rotation);
+					}, WATERLOGGED);
+			})
+			.recipe((ctx, provider) -> {
+				ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ctx.get())
+					.requires(AllBlocks.SEAT.get())
+					.requires(ItemTags.PLANKS)
+					.unlockedBy("has_seat", has(AllBlocks.SEAT.get()))
+					.save(recipeOutput(provider));
+			})
 			.onRegister(movementBehaviour(new BigSeatMovementBehaviour()))
 			.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
 			//.onRegister(assignDataBehaviour(new EntityNameDisplaySource(), "entity_name"))
@@ -182,18 +188,19 @@ public final class CIBlocks {
 		.initialProperties(SharedProperties::wooden)
 		.properties(p -> p.mapColor(DyeColor.BLACK))
 		.transform(axeOnly())
-		// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
-			.forAllStatesExcept(state -> {
-				String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
-				String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
+		.blockstate((ctx, provider) -> {
+			provider.getVariantBuilder(ctx.get())
+				.forAllStatesExcept(state -> {
+					String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
+					String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
 
-				int rotation = facing(state);
+					int rotation = facing(state);
 
-				return modelWithRotation(createModelFileWithExistingParent(p,
-					"block/chair/" + armrest + cropped_state,
-					"block/chair/kelp_chair_" + armrest + cropped_state), rotation);
-			}, WATERLOGGED)) */
+					return modelWithRotation(createModelFileWithExistingParent(provider,
+						"block/chair/" + armrest + cropped_state,
+						"block/chair/kelp_chair_" + armrest + cropped_state), rotation);
+				}, WATERLOGGED);
+		})
 		.onRegister(movementBehaviour(new BigSeatMovementBehaviour()))
 		.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
 		.onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.interiors.chair"))
@@ -206,17 +213,18 @@ public final class CIBlocks {
 		.initialProperties(SharedProperties::wooden)
 		.properties(p -> p.mapColor(DyeColor.BLACK))
 		.transform(axeOnly())
-		// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
-			.forAllStatesExcept(state -> {
-				String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
-				String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
+		.blockstate((ctx, provider) -> {
+			provider.getVariantBuilder(ctx.get())
+				.forAllStatesExcept(state -> {
+					String armrest = state.getValue(ChairBlock.ARMRESTS).getSerializedName();
+					String cropped_state = state.getValue(ChairBlock.CROPPED_BACK) ? "_cropped" : "";
 
-				int rotation = facing(state);
-				return modelWithRotation(createModelFileWithExistingParent(p,
-					"block/floor_chair/" + armrest + cropped_state,
-					"block/chair/kelp_floor_chair_" + armrest + cropped_state), rotation);
-			}, WATERLOGGED)) */
+					int rotation = facing(state);
+					return modelWithRotation(createModelFileWithExistingParent(provider,
+						"block/floor_chair/" + armrest + cropped_state,
+						"block/chair/kelp_floor_chair_" + armrest + cropped_state), rotation);
+				}, WATERLOGGED);
+		})
 		.onRegister(movementBehaviour(new SeatMovementBehaviour()))
 		.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
 		.onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.interiors.chair"))
@@ -229,13 +237,13 @@ public final class CIBlocks {
 		.initialProperties(SharedProperties::wooden)
 		.properties(p -> p.mapColor(DyeColor.BLACK))
 		.transform(axeOnly())
-		// TODO: Fix blockstate for MC 1.21.1 - variants() API changed
-			/* .blockstate((c, p) -> p.variants(c.get())
-			.forAllStatesExcept(state -> {
-				String facing = state.getValue(ChairBlock.FACING).getSerializedName();
-				int rotation = facing(state);
-				return modelWithRotation(getExistingModelFile(p, "block/kelp_seat"), rotation);
-			}, WATERLOGGED)) */
+		.blockstate((ctx, provider) -> {
+			provider.getVariantBuilder(ctx.get())
+				.forAllStatesExcept(state -> {
+					int rotation = facing(state);
+					return modelWithRotation(getExistingModelFile(provider, "block/kelp_seat"), rotation);
+				}, WATERLOGGED);
+		})
 		.onRegister(movementBehaviour(new SeatMovementBehaviour()))
 		.onRegister(interactionBehaviour(new SeatInteractionBehaviour()))
 		//.onRegister(assignDataBehaviour(new EntityNameDisplaySource(), "entity_name"))
