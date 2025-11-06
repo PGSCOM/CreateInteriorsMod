@@ -101,9 +101,6 @@ public final class CIBlocks {
 			.initialProperties(SharedProperties::wooden)
 			.properties(p -> p.mapColor(color))
 			.transform(axeOnly())
-			.initialProperties(SharedProperties::wooden)
-			.properties(p -> p.mapColor(color))
-			.transform(axeOnly())
 			.blockstate((ctx, provider) -> {
 				provider.getVariantBuilder(ctx.get())
 					.forAllStatesExcept(state -> {
