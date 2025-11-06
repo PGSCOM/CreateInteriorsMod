@@ -74,7 +74,8 @@ public class CIBlocksImpl {
 
 	@ApiStatus.Internal
 	public static void setupCreativeTab() {
-		CreateInteriors.REGISTRATE.setCreativeTab(CITabImpl.TAB);
+		CITabImpl.ensureInitialized();
+		CreateInteriors.REGISTRATE.setCreativeTab(CITabImpl.getTab());
 	}
 
 	@ApiStatus.Internal

@@ -13,45 +13,58 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 import com.sudolev.interiors.CreateInteriors;
-import com.sudolev.interiors.content.registry.CIBlocks;
 
 public class CITabImpl {
-	private static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, CreateInteriors.ID);
+	private static DeferredRegister<CreativeModeTab> REGISTER;
+	private static DeferredHolder<CreativeModeTab, CreativeModeTab> TAB;
 
-	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = REGISTER.register("main",
-		() -> CreativeModeTab.builder()
-			.title(Component.literal(CreateInteriors.NAME))
-			.icon(() -> {
-				try {
-					return CIBlocks.CHAIRS.get(DyeColor.RED).asStack(1);
-				} catch (Exception e) {
-					return ItemStack.EMPTY;
-				}
-			})
-			.displayItems((parameters, output) -> CreateInteriors.REGISTRATE
-				.getAll(Registries.BLOCK).stream()
-				.map(entry -> {
+	public static void ensureInitialized() {
+		if (REGISTER != null) return;
+		
+		REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, CreateInteriors.ID);
+		
+		// Lazy import de CIBlocks para evitar carga prematura
+		TAB = REGISTER.register("main", () -> {
+			return CreativeModeTab.builder()
+				.title(Component.literal(CreateInteriors.NAME))
+				.icon(() -> {
 					try {
-						return entry.get().asItem();
-					} catch (Exception ex) {
-						return null;
+						return com.sudolev.interiors.content.registry.CIBlocks.CHAIRS.get(DyeColor.RED).asStack(1);
+					} catch (Exception e) {
+						return ItemStack.EMPTY;
 					}
 				})
-				.filter(Objects::nonNull)
-				.forEach(output::accept))
-			.build());
+				.displayItems((parameters, output) -> CreateInteriors.REGISTRATE
+					.getAll(Registries.BLOCK).stream()
+					.map(entry -> {
+						try {
+							return entry.get().asItem();
+						} catch (Exception ex) {
+							return null;
+						}
+					})
+					.filter(Objects::nonNull)
+					.forEach(output::accept))
+				.build();
+		});
+	}
 
 	public static void register(IEventBus modEventBus) {
+		ensureInitialized();
 		REGISTER.register(modEventBus);
 	}
 
 	public static ResourceKey<CreativeModeTab> getKey() {
-		// TODO: Fix for MC 1.21.1 - getBackgroundLocation() was removed
-		// Creative tabs no longer have background locations in the same way
 		return ResourceKey.create(Registries.CREATIVE_MODE_TAB, CreateInteriors.asResource("main"));
 	}
 
 	public static CreativeModeTab get() {
+		ensureInitialized();
 		return TAB.get();
+	}
+	
+	public static DeferredHolder<CreativeModeTab, CreativeModeTab> getTab() {
+		ensureInitialized();
+		return TAB;
 	}
 }
